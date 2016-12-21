@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+
+    </script>
+</head>
+<body>
+<table>
+    <?php
+    for($i = 0;$i < 4;$i++){
+    ?>
+    <tr>
+    <?php
+        for($j = 0;$j < 3;$j++){
+    ?>
+            <td>座位<?php echo $i.'排'.$j.'座';?></td>
+    <?php
+        }
+    ?>
+    </tr>
+    <?php
+    }
+    ?>
+</table>
+</body>
+</html>
