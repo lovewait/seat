@@ -13,4 +13,12 @@ class StudentModel extends Model{
         }
         return false;
     }
+    public function decScore($score,$student_id = ''){
+        if($student_id){
+            $student = $this->where($student_id)->query()->find();
+            $student['score'] -= $score;
+            $this->field($student)->where($student_id)->update();
+            return $student;
+        }
+    }
 }

@@ -66,7 +66,7 @@ class Model{
         return "UPDATE `".$this->table.'`'.$this->parseUpdateField().$this->parseWhere();
     }
     public function where($where = []){
-        if(is_int($where) || ($where == $where + 0)){
+        if(is_int($where) || (is_string($where) && $where == intval($where) + 0)){
             $where = ["`".$this->pk .'`=\''. $where."'"];
         }
         if(is_string($where)){
@@ -80,7 +80,15 @@ class Model{
             throw new \Exception('Where Type Is Not Allowed'.json_encode($where,JSON_UNESCAPED_UNICODE));
         }
         if($where){
-            $this->where = array_unique(array_merge((array)$this->where,$where));
+            foreach($where as $key => $value){
+                if(!is_int($key)){
+                    $where[] = '`'.$key.'`=\''.$value."'";
+                    unset($where[$key]);
+                }
+            }
+            $where = array_unique(array_merge((array)$this->where,$where));
+
+            $this->where = $where;
         }
         return $this;
     }
@@ -100,16 +108,16 @@ class Model{
      */
     public function order($order){
         if(is_string($order)){
-            $order[] = $order;
+            $order = (array)$order;
         }
         if(is_array($order)){
-            $this->order = array_merge($this->order,$order);
+            $this->order = array_merge((array)$this->order,$order);
         }
         return $this;
     }
     private function parseOrder(){
         if($this->order && is_array($this->order)){
-            return 'ORDER BY '.implode(',',$this->order);
+            return ' ORDER BY '.implode(',',$this->order);
         }
         return '';
     }
